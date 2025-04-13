@@ -1,4 +1,4 @@
-export * from './CreateProcess.useCase';
+export * from './createProcess.useCase';
 export * from './deleteProcess.useCase';
 export * from './getAllProcesses.useCase';
 export * from './updateProcess.useCase';

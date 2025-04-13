@@ -11,6 +11,7 @@ import {
   authRouter,
   processRouter,
 } from './presentation/routes';
+import productRouter from './presentation/routes/product.router';
 
 // 1 Crear la aplicación Express
 const app = express();
@@ -22,6 +23,7 @@ configureMiddlewares(app);
 app.use(`${config.api.conventionApi}/user`, userRouter);
 app.use(`${config.api.conventionApi}/auth`, authRouter);
 app.use(`${config.api.conventionApi}/process`, processRouter);
+app.use(`${config.api.conventionApi}/product`, productRouter);
 
 
 // Ruta de prueba
