@@ -57,8 +57,6 @@ export class UserRepository implements IUserRepository {
       id: user._id.toHexString(),
       email: user.email,
       password: user.password, // Solo disponible en la entidad de dominio
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt
     };
   }
 }

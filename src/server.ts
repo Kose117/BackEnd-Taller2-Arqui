@@ -9,6 +9,7 @@ import { database } from './infrastructure';
 import {
   userRouter,
   authRouter,
+  processRouter,
 } from './presentation/routes';
 
 // 1 Crear la aplicación Express
@@ -20,6 +21,8 @@ configureMiddlewares(app);
 // 2 Definición de rutas protegidas para cada rol
 app.use(`${config.api.conventionApi}/user`, userRouter);
 app.use(`${config.api.conventionApi}/auth`, authRouter);
+app.use(`${config.api.conventionApi}/process`, processRouter);
+
 
 // Ruta de prueba
 app.get('/', (req, res) => {
