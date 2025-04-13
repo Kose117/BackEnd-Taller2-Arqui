@@ -1,12 +1,8 @@
-export type UserType = 'EVALUADOR' | 'INVESTIGADOR';
-
+// domain/entities/user.entity.ts
 export interface BaseUser {
   id: string;
-  name: string;
-  last_name: string;
   email: string;
   password: string;
-  type: UserType;
   createdAt: Date;
   updatedAt: Date;
 }

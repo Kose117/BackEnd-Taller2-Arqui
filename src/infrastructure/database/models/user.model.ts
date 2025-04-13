@@ -1,34 +1,21 @@
-// /src/infrastructure/database/models/user.model.ts
-import { Schema, model, Document, Types } from "mongoose";
+import { Schema, model, Document, Types, InferSchemaType } from 'mongoose';
 
-export type UserType = "EVALUADOR" | "INVESTIGADOR";
+const UserSchema = new Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
+}, { timestamps: true });
 
-export interface UserDocument extends Document {
+// Tipos derivados del esquema
+type UserSchemaType = InferSchemaType<typeof UserSchema>;
+export interface UserDocument extends UserSchemaType, Document {
   _id: Types.ObjectId;
-  name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  type: UserType;
   createdAt: Date;
   updatedAt: Date;
 }
 
-const UserSchema = new Schema<UserDocument>(
-  {
-    name: { type: String, required: true },
-    last_name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    type: {
-      type: String,
-      enum: ["EVALUADOR", "INVESTIGADOR"],
-      required: true,
-    },
-  },
-  {
-    timestamps: true, // crea createdAt, updatedAt
-  }
-);
+// Tipo Lean explícito
+export type UserLean = Omit<UserDocument, keyof Document> & {
+  _id: Types.ObjectId;
+};
 
-export const User = model<UserDocument>("Usuarios", UserSchema);
+export const User = model<UserDocument>('User', UserSchema);

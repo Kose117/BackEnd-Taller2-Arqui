@@ -1,0 +1,77 @@
+- .env
+- .gitignore
+- bun.lock
+- package.json
+- README.md
+- src
+  - application
+    - dtos
+      - auth.dto.ts
+      - index.ts
+      - process.dto.ts
+      - product.dto.ts
+      - user.dto.ts
+    - index.ts
+    - services
+      - auth.service.ts
+      - index.ts
+    - useCases
+      - auth
+        - getSession.useCase.ts
+        - index.ts
+        - login.useCase.ts
+        - refreshToken.useCase.ts
+      - index.ts
+      - user
+        - createUser.useCase.ts
+        - deleteUser.useCase.ts
+        - getAllUsers.useCase.ts
+        - getUserById.useCase.ts
+        - index.ts
+        - updateUser.useCase.ts
+  - domain
+    - entities
+      - index.ts
+      - user.entity.ts
+    - index.ts
+    - repositories
+      - index.ts
+      - user.repository.ts
+  - infrastructure
+    - config
+      - config.ts
+      - index.ts
+    - database
+      - database.ts
+      - index.ts
+      - models
+        - index.ts
+        - user.model.ts
+      - repositories
+        - index.ts
+        - user.repository.impl.ts
+    - index.ts
+  - presentation
+    - controllers
+      - auth.controller.ts
+      - index.ts
+      - user.controller.ts
+    - index.ts
+    - middleware
+      - configureMiddlewares.ts
+      - errorHandler.ts
+      - index.ts
+      - jwtMiddleware.ts
+    - routes
+      - auth.router.ts
+      - index.ts
+      - user.router.ts
+  - server.ts
+  - shared
+    - constants
+      - index.ts
+    - utils
+      - index.ts
+      - typeboxValidator.ts
+      - validateEnv.ts
+- tsconfig.json
