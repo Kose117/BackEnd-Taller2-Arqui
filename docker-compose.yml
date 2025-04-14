@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  backend-taller:
+    build: .
+    image: backend-app-new
+    container_name: backend-container-taller
+    ports:
+      - "3000:3000"

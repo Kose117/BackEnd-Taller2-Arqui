@@ -22,13 +22,12 @@ export class AuthService {
         if (!isPasswordValid) {
             throw new Error('Credenciales inválidas');
         }
-        const payload = { id: user.id, type: user.type };
+        const payload = { id: user.id };
         const accessToken = jwt.sign(payload, config.jwt.secret, { expiresIn: config.jwt.tokenExpiresIn });
         const refreshToken = jwt.sign(payload, config.jwt.secretRefresh, { expiresIn: config.jwt.refreshExpiresTokenIn });
         return {
             accessToken,
             refreshToken,
-            userType: user.type,
         };
     }
 
@@ -51,7 +50,6 @@ export class AuthService {
             return {
                 accessToken: newAccessToken,
                 refreshToken,
-                userType: decoded.type,  
             };
         } catch (error) {
             throw new Error((error as Error).message);

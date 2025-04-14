@@ -44,7 +44,6 @@ export class AuthController {
             this.setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
             res.status(200).json({
                 message: 'Inicio de sesión exitoso',
-                userType: tokens.userType,
             });
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -92,7 +91,6 @@ export class AuthController {
             this.setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
             res.status(200).json({
                 message: 'Tokens renovados correctamente',
-                userType: tokens.userType,
             });
         } catch (error: unknown) {
             if (error instanceof Error) {
