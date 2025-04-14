@@ -1,4 +1,3 @@
-// application/usecases/product/DeleteProductUseCase.ts
 import { IProductRepository } from '../../../domain';
 
 export class DeleteProductUseCase {

@@ -1,4 +1,3 @@
-// application/usecases/process/DeleteProcessUseCase.ts
 import { IProcessRepository } from '../../../domain';
 
 export class DeleteProcessUseCase {

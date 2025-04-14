@@ -1,4 +1,4 @@
-// infrastructure/database/repositories/user.repository.ts
+
 import { User as UserModel, UserLean } from '../models/user.model';
 import { User, IUserRepository } from '../../../domain';
 import { UpdateUserDto, UserResponseDto } from '../../../application';
@@ -42,10 +42,9 @@ export class UserRepository implements IUserRepository {
     return !!result;
   }
 
-  // Helpers de conversión de tipos
   private toResponseDto(user: UserLean): UserResponseDto {
     return {
-      id: user._id.toHexString(), // Conversión segura a string
+      id: user._id.toHexString(),
       email: user.email,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt
@@ -56,7 +55,7 @@ export class UserRepository implements IUserRepository {
     return {
       id: user._id.toHexString(),
       email: user.email,
-      password: user.password, // Solo disponible en la entidad de dominio
+      password: user.password, 
     };
   }
 }

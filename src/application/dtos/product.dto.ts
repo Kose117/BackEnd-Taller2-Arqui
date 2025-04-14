@@ -1,4 +1,3 @@
-// application/dtos/product.dto.ts
 import { Type, Static } from '@sinclair/typebox';
 
 export const CreateProductSchema = Type.Object({

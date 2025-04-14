@@ -1,4 +1,3 @@
-    // application/usecases/product/UpdateProductUseCase.ts
 import { IProductRepository } from '../../../domain';
 import { UpdateProductDto, ProductResponseDto } from '../../dtos';
 
@@ -9,7 +8,6 @@ export class UpdateProductUseCase {
     id: string,
     data: UpdateProductDto
   ): Promise<ProductResponseDto | null> {
-    // Validación de fecha de vencimiento
     if (data.expirationDate && data.expirationDate <= new Date()) {
       throw new Error('La fecha de vencimiento debe ser futura');
     }

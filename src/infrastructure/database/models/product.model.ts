@@ -1,14 +1,12 @@
 import { Schema, model, Document, Types } from 'mongoose';
 
-// Definir el documento con _id explícito
 export interface ProductDocument extends Document {
-  _id: Types.ObjectId; // ← Definir explícitamente el tipo
+  _id: Types.ObjectId; 
   expirationDate: Date;
   createdAt: Date;
   updatedAt: Date;
 }
 
-// Tipo Lean con _id como ObjectId
 export type ProductLean = Omit<ProductDocument, keyof Document> & {
   _id: Types.ObjectId;
 };

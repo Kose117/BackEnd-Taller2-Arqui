@@ -1,4 +1,3 @@
-// application/usecases/product/GetAllProductsUseCase.ts
 import { IProductRepository } from '../../../domain';
 import { ProductResponseDto } from '../../dtos';
 

@@ -1,4 +1,3 @@
-// infrastructure/database/models/process.model.ts
 import { Schema, model, Document, Types, InferSchemaType } from 'mongoose';
 
 const ProcessSchema = new Schema({
@@ -17,20 +16,16 @@ const ProcessSchema = new Schema({
   }
 }, { timestamps: true });
 
-// 1. Tipo del esquema
 type ProcessSchemaType = InferSchemaType<typeof ProcessSchema>;
 
-// 2. Interfaz del documento
 export interface ProcessDocument extends ProcessSchemaType, Document {
   _id: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
 
-// 3. Tipo Lean personalizado
 export type ProcessLean = Omit<ProcessDocument, keyof Document> & {
   _id: Types.ObjectId;
 };
 
-// 4. Exportar el modelo
 export const Process = model<ProcessDocument>('Process', ProcessSchema);

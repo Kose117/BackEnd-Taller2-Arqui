@@ -1,4 +1,3 @@
-// domain/repositories/iprocess.repository.ts
 import { Process } from '../entities/process.entity';
 import { UpdateProcessDto, ProcessResponseDto } from '../../application';
 

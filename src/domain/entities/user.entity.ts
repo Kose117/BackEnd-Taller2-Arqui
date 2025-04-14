@@ -1,4 +1,3 @@
-// domain/entities/user.entity.ts
 export interface BaseUser {
   id: string;
   email: string;

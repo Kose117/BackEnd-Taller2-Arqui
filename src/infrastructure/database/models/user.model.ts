@@ -5,7 +5,6 @@ const UserSchema = new Schema({
   password: { type: String, required: true }
 }, { timestamps: true });
 
-// Tipos derivados del esquema
 type UserSchemaType = InferSchemaType<typeof UserSchema>;
 export interface UserDocument extends UserSchemaType, Document {
   _id: Types.ObjectId;
@@ -13,7 +12,6 @@ export interface UserDocument extends UserSchemaType, Document {
   updatedAt: Date;
 }
 
-// Tipo Lean explícito
 export type UserLean = Omit<UserDocument, keyof Document> & {
   _id: Types.ObjectId;
 };

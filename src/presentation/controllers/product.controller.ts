@@ -1,4 +1,3 @@
-// presentation/controllers/product.controller.ts
 import { Request, Response, NextFunction } from 'express';
 import {
   CreateProductUseCase,
@@ -18,9 +17,6 @@ export class ProductController {
     private readonly deleteUseCase: DeleteProductUseCase
   ) {}
 
-  /**
-   * Crea un nuevo producto.
-   */
   public create = async (
     req: Request,
     res: Response,
@@ -36,9 +32,6 @@ export class ProductController {
     }
   };
 
-  /**
-   * Obtiene todos los productos.
-   */
   public getAll = async (
     req: Request,
     res: Response,
@@ -52,9 +45,6 @@ export class ProductController {
     }
   };
 
-  /**
-   * Obtiene un producto por su ID.
-   */
   public getById = async (
     req: Request,
     res: Response,
@@ -72,9 +62,6 @@ export class ProductController {
     }
   };
 
-  /**
-   * Actualiza un producto existente.
-   */
   public update = async (
     req: Request,
     res: Response,
@@ -95,9 +82,7 @@ export class ProductController {
     }
   };
 
-  /**
-   * Elimina un producto existente.
-   */
+
   public delete = async (
     req: Request,
     res: Response,

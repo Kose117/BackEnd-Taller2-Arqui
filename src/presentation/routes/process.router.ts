@@ -1,4 +1,3 @@
-// presentation/routes/process.router.ts
 import { Router } from 'express';
 import { ProcessController } from '../../presentation';
 import { ProcessRepository } from '../../infrastructure';

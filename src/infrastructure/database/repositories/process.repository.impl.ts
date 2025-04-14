@@ -1,4 +1,3 @@
-// infrastructure/database/repositories/process.repository.ts
 import { ProcessLean, Process as ProcessModel } from '../models/process.model';
 import { Process, IProcessRepository } from '../../../domain';
 import { UpdateProcessDto, ProcessResponseDto } from '../../../application';

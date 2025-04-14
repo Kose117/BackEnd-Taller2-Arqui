@@ -1,4 +1,3 @@
-// application/usecases/process/GetProcessByIdUseCase.ts
 import { IProcessRepository } from '../../../domain';
 import { ProcessResponseDto } from '../../dtos';
 

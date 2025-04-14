@@ -1,4 +1,3 @@
-// application/dtos/process.dto.ts
 import { Type, Static } from '@sinclair/typebox';
 
 export const ProcessStatusEnum = Type.Union([
