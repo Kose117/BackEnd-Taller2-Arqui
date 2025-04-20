@@ -108,9 +108,9 @@ export class UserController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const { id } = req.params;
+      const userId = req.user!.id;  
       const updateDto = req.body as UpdateUserDto;
-      const user = await this.updateUserUseCase.execute(id, updateDto);
+      const user = await this.updateUserUseCase.execute(userId, updateDto);
 
       if (!user) {
         res.status(404).json({ message: 'User not found' });

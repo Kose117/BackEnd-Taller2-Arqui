@@ -9,6 +9,7 @@ import {
   UpdateUserUseCase,
   DeleteUserUseCase,
 } from '../../application';
+import { validateRoleMiddleware } from '../middleware/jwtMiddleware';
 
 
 const router = Router();
@@ -35,7 +36,7 @@ router.get('/', userController.getAll);
 router.post('/operador', userController.createOperator);
 router.post('/admin', userController.createAdmin);
 router.get('/:id', userController.getById);
-router.patch('/:id', userController.update);
+router.patch('/', validateRoleMiddleware(['OPERADOR', 'ADMIN']) , userController.update);
 router.delete('/:id', userController.delete);
 
 export default router;
