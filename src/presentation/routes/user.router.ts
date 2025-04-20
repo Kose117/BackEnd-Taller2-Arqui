@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { UserController } from '../../presentation';
 import { UserRepository } from '../../infrastructure/database/repositories';
 import {
-  CreateUserUseCase,
+  CreateOperatorUseCase,
+  CreateAdminUseCase,
   GetAllUsersUseCase,
   GetUserByIdUseCase,
   UpdateUserUseCase,
@@ -14,14 +15,16 @@ const router = Router();
 
 const userRepository = new UserRepository();
 
-const createUserUseCase = new CreateUserUseCase(userRepository);
+const createOperatorUseCase = new CreateOperatorUseCase(userRepository);
+const createAdminUseCase = new CreateAdminUseCase(userRepository);
 const getAllUsersUseCase = new GetAllUsersUseCase(userRepository);
 const getUserByIdUseCase = new GetUserByIdUseCase(userRepository);
 const updateUserUseCase = new UpdateUserUseCase(userRepository);
 const deleteUserUseCase = new DeleteUserUseCase(userRepository);
 
 const userController = new UserController(
-  createUserUseCase,
+  createOperatorUseCase,
+  createAdminUseCase,
   getAllUsersUseCase,
   getUserByIdUseCase,
   updateUserUseCase,
@@ -29,7 +32,8 @@ const userController = new UserController(
 );
 
 router.get('/', userController.getAll);
-router.post('/', userController.create);
+router.post('/operador', userController.createOperator);
+router.post('/admin', userController.createAdmin);
 router.get('/:id', userController.getById);
 router.patch('/:id', userController.update);
 router.delete('/:id', userController.delete);

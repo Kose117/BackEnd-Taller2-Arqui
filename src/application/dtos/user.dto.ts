@@ -4,10 +4,6 @@ import { Type, Static } from '@sinclair/typebox';
 export const CreateUserSchema = Type.Object({
   email:    Type.String({ format: 'email' }),
   password: Type.String(),
-  userType: Type.Union([
-    Type.Literal('OPERATOR'),
-    Type.Literal('ADMIN')
-  ], { title: 'UserType' })
 });
 export type CreateUserDto = Static<typeof CreateUserSchema>;
 

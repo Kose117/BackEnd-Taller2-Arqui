@@ -2,7 +2,8 @@
 
 import { Request, Response, NextFunction } from "express";
 import {
-  CreateUserUseCase,
+  CreateOperatorUseCase,
+  CreateAdminUseCase,
   GetAllUsersUseCase,
   GetUserByIdUseCase,
   UpdateUserUseCase,
@@ -17,29 +18,37 @@ import {
 
 export class UserController {
   constructor(
-    private readonly createUserUseCase: CreateUserUseCase,
+    private readonly createOperatorUseCase: CreateOperatorUseCase,
+    private readonly createAdminUseCase: CreateAdminUseCase,
     private readonly getAllUsersUseCase: GetAllUsersUseCase,
     private readonly getUserByIdUseCase: GetUserByIdUseCase,
     private readonly updateUserUseCase: UpdateUserUseCase,
     private readonly deleteUserUseCase: DeleteUserUseCase
   ) {}
 
-  public create = async (
+  public createOperator = async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
     try {
-      const createDto = req.body as CreateUserDto;
-      const user = await this.createUserUseCase.execute(createDto);
+      const dto = req.body as CreateUserDto;
+      const user = await this.createOperatorUseCase.execute(dto);
+      res.status(201).json(this.toResponseDto(user));
+    } catch (error) {
+      next(error);
+    }
+  };
 
-      const response: UserResponseDto = {
-        id: user.id,
-        email: user.email,
-        userType: user.userType,
-      };
-
-      res.status(201).json(response);
+  public createAdmin = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const dto = req.body as CreateUserDto;
+      const user = await this.createAdminUseCase.execute(dto);
+      res.status(201).json(this.toResponseDto(user));
     } catch (error) {
       next(error);
     }
@@ -134,4 +143,13 @@ export class UserController {
       next(error);
     }
   };
+
+  // Helper interno
+  private toResponseDto(user: any): UserResponseDto {
+    return {
+      id:       user.id,
+      email:    user.email,
+      userType: user.userType
+    };
+  }
 }
