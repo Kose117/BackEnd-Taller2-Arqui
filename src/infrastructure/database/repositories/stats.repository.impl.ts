@@ -1,4 +1,4 @@
-import { Process as ProcessModel } from '../models/process.model';   // tu esquema Mongoose
+import { ProcessModel } from '../models/process.model';   // tu esquema Mongoose
 import { IProductStatsRepository } from '../../../domain/repositories/productStats.repository';
 import { ProductStatsDto } from '../../../application/dtos/stats/productStats.dto';
 import { differenceInCalendarDays, subMonths } from 'date-fns';

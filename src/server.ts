@@ -10,6 +10,7 @@ import {
   userRouter,
   authRouter,
   processRouter,
+  statsRouter,
 } from './presentation/routes';
 import productRouter from './presentation/routes/product.router';
 
@@ -22,6 +23,7 @@ app.use(`${config.api.conventionApi}/user`, userRouter);
 app.use(`${config.api.conventionApi}/auth`, authRouter);
 app.use(`${config.api.conventionApi}/process`, processRouter);
 app.use(`${config.api.conventionApi}/product`, productRouter);
+app.use(`${config.api.conventionApi}/stats`, statsRouter);
 
 
 app.get('/', (req, res) => {
