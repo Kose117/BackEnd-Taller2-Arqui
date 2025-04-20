@@ -1,5 +1,4 @@
 // src/infrastructure/database/models/product.model.ts
-
 import { Schema, model, Document, Types, InferSchemaType } from 'mongoose';
 
 // 1) Definición del esquema (ya lo tienes con todos los campos)

@@ -1,17 +1,16 @@
-import { IProcessRepository } from '../../../domain';
-import { UpdateProcessDto, ProcessResponseDto } from '../../dtos';
+// src/application/useCases/process/updateProcess.useCase.ts
+
+import { IProcessRepository } from '../../../domain/repositories/process.repository';
+import { BaseProcess } from '../../../domain/entities/process.entity';
+import { UpdateProcessDto } from '../../dtos/process.dto';
 
 export class UpdateProcessUseCase {
-  constructor(private readonly repository: IProcessRepository) {}
+  constructor(private readonly repo: IProcessRepository) {}
 
-  public async execute(
+  async execute(
     id: string,
     data: UpdateProcessDto
-  ): Promise<ProcessResponseDto | null> {
-    if (data.progressPercentage && (data.progressPercentage < 0 || data.progressPercentage > 100)) {
-      throw new Error('El porcentaje debe estar entre 0 y 100');
-    }
-
-    return this.repository.update(id, data);
+  ): Promise<BaseProcess | null> {
+    return this.repo.update(id, data as Partial<Omit<BaseProcess, 'id'>>);
   }
 }

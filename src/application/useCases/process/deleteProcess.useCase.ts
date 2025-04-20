@@ -1,15 +1,11 @@
-import { IProcessRepository } from '../../../domain';
+// src/application/useCases/process/deleteProcess.useCase.ts
+
+import { IProcessRepository } from '../../../domain/repositories/process.repository';
 
 export class DeleteProcessUseCase {
-  constructor(private readonly repository: IProcessRepository) {}
+  constructor(private readonly repo: IProcessRepository) {}
 
-  public async execute(id: string): Promise<boolean> {
-    const exists = await this.repository.findById(id);
-    
-    if (!exists) {
-      throw new Error('Proceso no encontrado');
-    }
-    
-    return this.repository.delete(id);
+  async execute(id: string): Promise<void> {
+    await this.repo.delete(id);
   }
 }
