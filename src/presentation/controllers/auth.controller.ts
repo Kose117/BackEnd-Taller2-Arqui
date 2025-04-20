@@ -83,7 +83,8 @@ export class AuthController {
                 return;
             }
             const session = await this.getSessionUseCase.execute(token);
-            res.status(200).json({ userType: session.userType });
+            console.log('Session:', session);
+            res.status(200).json({ userType: session.userType, email: session.email });
         } catch (error: unknown) {
             if (error instanceof Error) {
                 res.status(401).json({ message: error.message });

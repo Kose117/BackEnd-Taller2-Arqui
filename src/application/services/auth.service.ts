@@ -62,9 +62,11 @@ export class AuthService {
 
 
     public async getSession(token: string): Promise<any> {
+        console.log('Token:', token);
         try {
             const decoded: any = jwt.verify(token, config.jwt.secret);
             const user = await this.getUserByIdUseCase.execute(decoded.id);
+            console.log(user);
             if (!user) {
                 throw new Error('Usuario no encontrado');
             }
