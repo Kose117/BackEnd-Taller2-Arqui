@@ -135,8 +135,8 @@ export class UserController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const { id } = req.params;
-      await this.deleteUserUseCase.execute(id);
+      const userId = req.user!.id;
+      await this.deleteUserUseCase.execute(userId);
       // No devolvemos cuerpo, solo 204 No Content
       res.sendStatus(204);
     } catch (error) {
