@@ -1,13 +1,11 @@
-// src/application/useCases/product/createProduct.useCase.ts
+// src/application/useCases/product/getProductsByUser.useCase.ts
 
 import { IProductRepository} from '../../../domain/repositories/product.repository';
 import { BaseProduct }        from '../../../domain/entities/product.entity';
 
-export class CreateProductUseCase {
+export class GetProductsByUserUseCase {
   constructor(private readonly repo: IProductRepository) {}
-  async execute(
-    data: Omit<BaseProduct, 'id'>
-  ): Promise<BaseProduct> {
-    return this.repo.create(data);
+  async execute(userId: string): Promise<BaseProduct[]> {
+    return this.repo.findByUserId(userId);
   }
 }

@@ -1,10 +1,12 @@
-import { IProductRepository } from '../../../domain';
-import { ProductResponseDto } from '../../dtos';
+// src/application/useCases/product/getAllProducts.useCase.ts
+
+import { IProductRepository} from '../../../domain/repositories/product.repository';
+import { BaseProduct }        from '../../../domain/entities/product.entity';
 
 export class GetAllProductsUseCase {
-  constructor(private readonly repository: IProductRepository) {}
+  constructor(private readonly repo: IProductRepository) {}
 
-  public async execute(): Promise<ProductResponseDto[]> {
-    return this.repository.findAll();
+  async execute(): Promise<BaseProduct[]> {
+    return this.repo.findAll();
   }
 }

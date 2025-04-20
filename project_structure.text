@@ -1,7 +1,10 @@
 - .env
 - .gitignore
 - bun.lock
+- docker-compose.yml
+- Dockerfile
 - package.json
+- project_structure.text
 - README.md
 - src
   - application
@@ -10,6 +13,8 @@
       - index.ts
       - process.dto.ts
       - product.dto.ts
+      - stats
+        - productStats.dto.ts
       - user.dto.ts
     - index.ts
     - services
@@ -22,6 +27,22 @@
         - login.useCase.ts
         - refreshToken.useCase.ts
       - index.ts
+      - process
+        - createProcess.useCase.ts
+        - deleteProcess.useCase.ts
+        - getAllProcesses.useCase.ts
+        - getProcessById.useCase.ts
+        - index.ts
+        - updateProcess.useCase.ts
+      - product
+        - createProduct.useCase.ts
+        - deleteProduct.useCase.ts
+        - getAllProducts.useCase.ts
+        - getProductById.useCase.ts
+        - index.ts
+        - updateProduct.useCase.ts
+      - stats
+        - getProductStats.useCase.ts
       - user
         - createUser.useCase.ts
         - deleteUser.useCase.ts
@@ -32,10 +53,15 @@
   - domain
     - entities
       - index.ts
+      - process.entity.ts
+      - product.entity.ts
       - user.entity.ts
     - index.ts
     - repositories
       - index.ts
+      - process.repository.ts
+      - product.repository.ts
+      - productStats.repository.ts
       - user.repository.ts
   - infrastructure
     - config
@@ -46,15 +72,23 @@
       - index.ts
       - models
         - index.ts
+        - process.model.ts
+        - product.model.ts
         - user.model.ts
       - repositories
         - index.ts
+        - process.repository.impl.ts
+        - product.repository.impl.ts
+        - stats.repository.impl.ts
         - user.repository.impl.ts
     - index.ts
   - presentation
     - controllers
       - auth.controller.ts
       - index.ts
+      - process.controller.ts
+      - product.controller.ts
+      - stats.controller.ts
       - user.controller.ts
     - index.ts
     - middleware
@@ -65,6 +99,9 @@
     - routes
       - auth.router.ts
       - index.ts
+      - process.router.ts
+      - product.router.ts
+      - stats.router.ts
       - user.router.ts
   - server.ts
   - shared
@@ -74,4 +111,6 @@
       - index.ts
       - typeboxValidator.ts
       - validateEnv.ts
+  - types
+    - express.d.ts
 - tsconfig.json

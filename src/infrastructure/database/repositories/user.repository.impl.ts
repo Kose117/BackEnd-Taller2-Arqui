@@ -1,61 +1,63 @@
-
-import { User as UserModel, UserLean } from '../models/user.model';
-import { User, IUserRepository } from '../../../domain';
-import { UpdateUserDto, UserResponseDto } from '../../../application';
+import { Types } from 'mongoose';
+import { IUserRepository } from '../../../domain/repositories/user.repository';
+import { BaseUser, UserType } from '../../../domain/entities/user.entity';
+import { UserModel, UserLean } from '../models/user.model';
 
 export class UserRepository implements IUserRepository {
-  public async findAll(): Promise<UserResponseDto[]> {
-    const users = await UserModel.find().lean<UserLean[]>();
-    return users.map(user => this.toResponseDto(user));
+  async findAll(): Promise<BaseUser[]> {
+    const docs = await UserModel
+      .find()
+      .lean<UserLean[]>()
+      .exec();
+    return docs.map((doc: UserLean) => this.toDomain(doc));
   }
 
-  public async findById(id: string): Promise<UserResponseDto | null> {
-    const user = await UserModel.findById(id).lean<UserLean>();
-    return user ? this.toResponseDto(user) : null;
+  async findById(id: string): Promise<BaseUser | null> {
+    if (!Types.ObjectId.isValid(id)) return null;
+    const doc = await UserModel
+      .findById(id)
+      .lean<UserLean>()
+      .exec();
+    return doc ? this.toDomain(doc) : null;
   }
 
-  public async findByEmail(email: string): Promise<User | null> {
-    const user = await UserModel.findOne({ email }).lean<UserLean>();
-    return user ? this.toDomainEntity(user) : null;
+  async findByEmail(email: string): Promise<BaseUser | null> {
+    const doc = await UserModel
+      .findOne({ email })
+      .lean<UserLean>()
+      .exec();
+    return doc ? this.toDomain(doc) : null;
   }
 
-  public async create(data: Omit<User, 'id'>): Promise<User> {
-    const user = await UserModel.create(data);
-    return this.toDomainEntity(user.toObject());
+  async create(data: Omit<BaseUser, 'id'>): Promise<BaseUser> {
+    const created = await UserModel.create(data);
+    const doc = created.toObject() as UserLean;
+    return this.toDomain(doc);
   }
 
-  public async update(
+  async update(
     id: string,
-    data: UpdateUserDto
-  ): Promise<UserResponseDto | null> {
-    const user = await UserModel.findByIdAndUpdate(
-      id,
-      data,
-      { new: true, runValidators: true }
-    ).lean<UserLean>();
-
-    return user ? this.toResponseDto(user) : null;
+    data: Partial<Omit<BaseUser, 'id'>>
+  ): Promise<BaseUser | null> {
+    if (!Types.ObjectId.isValid(id)) return null;
+    const doc = await UserModel
+      .findByIdAndUpdate(id, data, { new: true, runValidators: true })
+      .lean<UserLean>()
+      .exec();
+    return doc ? this.toDomain(doc) : null;
   }
 
-  public async delete(id: string): Promise<boolean> {
-    const result = await UserModel.findByIdAndDelete(id);
-    return !!result;
+  async delete(id: string): Promise<void> {
+    if (!Types.ObjectId.isValid(id)) return;
+    await UserModel.findByIdAndDelete(id).exec();
   }
 
-  private toResponseDto(user: UserLean): UserResponseDto {
+  private toDomain(doc: UserLean): BaseUser {
     return {
-      id: user._id.toHexString(),
-      email: user.email,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt
-    };
-  }
-
-  private toDomainEntity(user: UserLean): User {
-    return {
-      id: user._id.toHexString(),
-      email: user.email,
-      password: user.password, 
+      id:       doc._id.toHexString(),
+      email:    doc.email,
+      password: doc.password,
+      userType: doc.userType as UserType,
     };
   }
 }

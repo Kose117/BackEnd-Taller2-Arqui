@@ -7,7 +7,9 @@ import {
   GetProductByIdUseCase,
   UpdateProductUseCase,
   DeleteProductUseCase,
+  GetProductsByUserUseCase,
 } from '../../application';
+import { validateRoleMiddleware } from '../middleware/jwtMiddleware';
 
 const router = Router();
 const repository = new ProductRepository();
@@ -17,19 +19,23 @@ const getAllUseCase = new GetAllProductsUseCase(repository);
 const getByIdUseCase = new GetProductByIdUseCase(repository);
 const updateUseCase = new UpdateProductUseCase(repository);
 const deleteUseCase = new DeleteProductUseCase(repository);
+const getByUserUseCase = new GetProductsByUserUseCase(repository);
 
 const controller = new ProductController(
   createUseCase,
   getAllUseCase,
   getByIdUseCase,
   updateUseCase,
-  deleteUseCase
+  deleteUseCase,
+  getByUserUseCase
+
 );
 
-router.post('/', controller.create);
-router.get('/', controller.getAll);
-router.get('/:id', controller.getById);
-router.patch('/:id', controller.update);
-router.delete('/:id', controller.delete);
+router.post('/', validateRoleMiddleware(['OPERADOR', 'ADMIN']) ,controller.create);
+router.get('/user',validateRoleMiddleware(['OPERADOR', 'ADMIN']), controller.getByUser);
+router.get('/', validateRoleMiddleware(['OPERADOR', 'ADMIN']) ,controller.getAll);
+router.get('/:id', validateRoleMiddleware(['OPERADOR', 'ADMIN']),controller.getById);
+router.patch('/:id',validateRoleMiddleware(['OPERADOR', 'ADMIN']), controller.update);
+router.delete('/:id',validateRoleMiddleware(['OPERADOR', 'ADMIN']), controller.delete);
 
 export default router;

@@ -1,17 +1,17 @@
-import { IProductRepository } from '../../../domain';
-import { UpdateProductDto, ProductResponseDto } from '../../dtos';
+// src/application/useCases/product/updateProduct.useCase.ts
+import { IProductRepository} from '../../../domain/repositories/product.repository';
+import { BaseProduct }        from '../../../domain/entities/product.entity';
 
 export class UpdateProductUseCase {
-  constructor(private readonly repository: IProductRepository) {}
+  constructor(private readonly repo: IProductRepository) {}
 
-  public async execute(
+  /**
+   * data puede contener cualquier subconjunto de campos de BaseProduct (sin 'id')
+   */
+  async execute(
     id: string,
-    data: UpdateProductDto
-  ): Promise<ProductResponseDto | null> {
-    if (data.expirationDate && data.expirationDate <= new Date()) {
-      throw new Error('La fecha de vencimiento debe ser futura');
-    }
-
-    return this.repository.update(id, data);
+    data: Partial<Omit<BaseProduct, 'id'>>
+  ): Promise<BaseProduct | null> {
+    return this.repo.update(id, data);
   }
 }

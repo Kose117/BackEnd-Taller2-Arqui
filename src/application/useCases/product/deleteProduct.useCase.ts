@@ -1,15 +1,14 @@
-import { IProductRepository } from '../../../domain';
+// src/application/useCases/product/deleteProduct.useCase.ts
+
+import { IProductRepository} from '../../../domain/repositories/product.repository';
 
 export class DeleteProductUseCase {
-  constructor(private readonly repository: IProductRepository) {}
+  constructor(private readonly repo: IProductRepository) {}
 
-  public async execute(id: string): Promise<boolean> {
-    const exists = await this.repository.findById(id);
-    
-    if (!exists) {
-      throw new Error('Producto no encontrado');
-    }
-    
-    return this.repository.delete(id);
+  /**
+   * Lanza error o simplemente resuelve void
+   */
+  async execute(id: string): Promise<void> {
+    await this.repo.delete(id);
   }
 }

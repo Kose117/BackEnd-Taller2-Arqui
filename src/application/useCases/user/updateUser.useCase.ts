@@ -1,28 +1,30 @@
-import { IUserRepository } from '../../../domain';
-import { UpdateUserDto, UserResponseDto } from '../../dtos';
+// src/application/useCases/user/updateUser.useCase.ts
+
 import bcrypt from 'bcryptjs';
 import config from '../../../infrastructure/config';
+import { IUserRepository } from '../../../domain/repositories/user.repository';
+import { BaseUser } from '../../../domain/entities/user.entity';
 
 export class UpdateUserUseCase {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(private readonly userRepo: IUserRepository) {}
 
-  public async execute(id: string, data: UpdateUserDto): Promise<UserResponseDto | null> {
-    // Hashear la nueva contraseña si viene en la actualización
-    let updateData = { ...data };
-    
+  /**
+   * Ejecuta la actualización de un usuario.
+   * Si viene data.password, lo hashea con bcrypt antes de guardar.
+   */
+  async execute(
+    id: string,
+    data: Partial<Omit<BaseUser, 'id'>>
+  ): Promise<BaseUser | null> {
+    // Si se envía nueva contraseña, la hasheamos
     if (data.password) {
-      const hashedPassword = await bcrypt.hash(data.password, config.jwt.saltRounds);
-      updateData = { ...updateData, password: hashedPassword };
+      const hashed = await bcrypt.hash(
+        data.password,
+        config.jwt.saltRounds
+      );
+      data = { ...data, password: hashed };
     }
 
-    // Actualizar y obtener el usuario actualizado
-    const updatedUser = await this.userRepository.update(id, updateData);
-    
-    if (!updatedUser) return null;
-
-    // Eliminar campos sensibles de la respuesta
-    const safeUserData = { ...updatedUser };
-    
-    return safeUserData;
+    return this.userRepo.update(id, data);
   }
 }

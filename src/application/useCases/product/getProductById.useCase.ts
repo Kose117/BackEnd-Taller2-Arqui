@@ -1,16 +1,11 @@
-import { IProductRepository } from '../../../domain';
-import { ProductResponseDto } from '../../dtos';
+// src/application/useCases/product/getProductById.useCase.ts
+import { IProductRepository} from '../../../domain/repositories/product.repository';
+import { BaseProduct }        from '../../../domain/entities/product.entity';
 
 export class GetProductByIdUseCase {
-  constructor(private readonly repository: IProductRepository) {}
+  constructor(private readonly repo: IProductRepository) {}
 
-  public async execute(id: string): Promise<ProductResponseDto | null> {
-    const product = await this.repository.findById(id);
-    
-    if (!product) {
-      throw new Error('Producto no encontrado');
-    }
-    
-    return product;
+  async execute(id: string): Promise<BaseProduct | null> {
+    return this.repo.findById(id);
   }
 }

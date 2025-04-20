@@ -4,45 +4,44 @@ import config from "../../infrastructure/config";
 
 // Roles permitidos en toda la aplicación
 const VALID_ROLES = ["ADMIN", "OPERADOR"] as const;
-type ValidRole = typeof VALID_ROLES[number];
-
+type ValidRole = (typeof VALID_ROLES)[number];
 
 export const validateRoleMiddleware =
-    (roles: ValidRole[] = []) =>
-        (req: Request, res: Response, next: NextFunction): Response | void => {
-            const auth = req.headers.authorization;
-            const token = auth?.split(" ")[1];
+  (roles: ValidRole[] = []) =>
+  (req: Request, res: Response, next: NextFunction): Response | void => {
 
-            if (!token) {
-                return res.status(403).json({ message: "Token no proporcionado" });
-            }
+    const token = req.cookies?.accessToken as string | undefined;
 
-            let decoded: JwtPayload;
-            try {
-                decoded = jwt.verify(token, config.jwt.secret) as JwtPayload;
-            } catch {
-                return res.status(401).json({ message: "Token inválido o expirado" });
-            }
+    if (!token) {
+      return res.status(403).json({ message: "Token no proporcionado" });
+    }
 
-            // 1) Validar que venga un campo 'type' dentro de los roles válidos
-            const userType = decoded.type;
-            if (
-                typeof userType !== "string" ||
-                !VALID_ROLES.includes(userType as ValidRole)
-            ) {
-                return res.status(403).json({ message: "Rol inválido en token" });
-            }
+    let decoded: JwtPayload;
+    try {
+      decoded = jwt.verify(token, config.jwt.secret) as JwtPayload;
+    } catch {
+      return res.status(401).json({ message: "Token inválido o expirado" });
+    }
 
-            // 2) Asignar sólo después de validar
-            req.user = {
-                id: decoded.id as string,
-                type: userType as ValidRole,
-            };
+    // 1) Validar que venga un campo 'type' dentro de los roles válidos
+    const userType = decoded.userType;
+    if (
+      typeof userType !== "string" ||
+      !VALID_ROLES.includes(userType as ValidRole)
+    ) {
+      return res.status(403).json({ message: "Rol inválido en token" });
+    }
 
-            // 3) Si se especificaron roles concretos, filtramos
-            if (roles.length > 0 && !roles.includes(req.user.type)) {
-                return res.status(403).json({ message: "Acceso denegado" });
-            }
+    // 2) Asignar sólo después de validar
+    req.user = {
+      id: decoded.id as string,
+      type: userType as ValidRole,
+    };
 
-            next();
-        };
+    // 3) Si se especificaron roles concretos, filtramos
+    if (roles.length > 0 && !roles.includes(req.user.type)) {
+      return res.status(403).json({ message: "Acceso denegado" });
+    }
+
+    next();
+  };

@@ -1,19 +1,14 @@
-import { CreateUserDto } from '../../../application';
-import { IUserRepository, User } from '../../../domain';
 import bcrypt from 'bcryptjs';
 import config from '../../../infrastructure/config';
+import { IUserRepository } from '../../../domain/repositories/user.repository';
+import { BaseUser } from '../../../domain/entities/user.entity';
 
 export class CreateUserUseCase {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(private readonly userRepo: IUserRepository) {}
 
-  public async execute(data: CreateUserDto): Promise<User> {
+  async execute(data: Omit<BaseUser, 'id'>): Promise<BaseUser> {
     const hashedPassword = await bcrypt.hash(data.password, config.jwt.saltRounds);
-
-    const userWithHashedPassword: CreateUserDto = {
-      ...data,
-      password: hashedPassword,
-    };
-
-    return this.userRepository.create(userWithHashedPassword);
+    data.password = hashedPassword;
+    return this.userRepo.create(data);
   }
 }
