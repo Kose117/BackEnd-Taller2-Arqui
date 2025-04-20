@@ -1,14 +1,45 @@
-import { Process, IProcessRepository } from '../../../domain';
-import { CreateProcessDto } from '../../dtos';
+import { BaseProcess } from "../../../domain/entities/process.entity";
+import { IProcessRepository } from "../../../domain/repositories/process.repository";
+import { IProductRepository } from "../../../domain/repositories/product.repository";
+import { CreateProcessDto } from "../../dtos/process.dto";
 
 export class CreateProcessUseCase {
-  constructor(private readonly repository: IProcessRepository) {}
+  constructor(
+    private readonly processRepo: IProcessRepository,
+    private readonly productRepo: IProductRepository
+  ) {}
 
-  public async execute(data: CreateProcessDto): Promise<Process> {
-    if (data.deliveryDate < data.startDate) {
-      throw new Error('La fecha de entrega no puede ser anterior a la de inicio');
-    }
+  /**
+   * Crea un proceso calculando totalAmount basado en precios de productos
+   */
+  async execute(dto: CreateProcessDto): Promise<BaseProcess> {
+    // 1. Obtener precio de cada producto
+    const itemsWithPrices = await Promise.all(
+      dto.items.map(async item => {
+        const product = await this.productRepo.findById(item.productId);
+        if (!product) throw new Error(`Producto ${item.productId} no encontrado`);
+        return { ...item, price: product.price };
+      })
+    );
 
-    return this.repository.create(data);
+    // 2. Calcular totalAmount
+    const totalAmount = itemsWithPrices.reduce(
+      (sum, it) => sum + it.quantity * it.price,
+      0
+    );
+
+    // 3. Construir la entidad sin id
+    const toCreate: Omit<BaseProcess, 'id'> = {
+      userId:             dto.userId,
+      items:              dto.items,
+      totalAmount,
+      startDate:          dto.startDate,
+      deliveryDate:       dto.deliveryDate,
+      progressPercentage: dto.progressPercentage,
+      status:             dto.status
+    };
+
+    // 4. Persistir
+    return this.processRepo.create(toCreate);
   }
 }

@@ -1,54 +1,69 @@
-import { ProcessLean, Process as ProcessModel } from '../models/process.model';
-import { Process, IProcessRepository } from '../../../domain';
-import { UpdateProcessDto, ProcessResponseDto } from '../../../application';
+// src/infrastructure/database/repositories/process.repository.ts
+
+import { Types } from "mongoose";
+import { IProcessRepository } from "../../../domain/repositories/process.repository";
+import { BaseProcess } from "../../../domain/entities/process.entity";
+import { ProcessModel, ProcessLean } from "../models/process.model";
 
 export class ProcessRepository implements IProcessRepository {
-  public async findAll(): Promise<ProcessResponseDto[]> {
-    const processes = await ProcessModel.find().lean();
-    return processes.map(p => this.toResponseDto(p));
+  async findAll(): Promise<BaseProcess[]> {
+    const docs = await ProcessModel.find().lean<ProcessLean[]>().exec();
+    return docs.map(this.toDomain);
   }
 
-  public async findById(id: string): Promise<ProcessResponseDto | null> {
-    const process = await ProcessModel.findById(id).lean();
-    return process ? this.toResponseDto(process) : null;
+  async findById(id: string): Promise<BaseProcess | null> {
+    if (!Types.ObjectId.isValid(id)) return null;
+    const doc = await ProcessModel.findById(id).lean<ProcessLean>().exec();
+    return doc ? this.toDomain(doc) : null;
   }
 
-  public async create(data: Omit<Process, 'id'>): Promise<Process> {
-    const process = await ProcessModel.create(data);
-    return this.toDomainEntity(process.toObject());
+  async findByUserId(userId: string): Promise<BaseProcess[]> {
+    if (!Types.ObjectId.isValid(userId)) return [];
+    const docs = await ProcessModel.find({ userId: new Types.ObjectId(userId) })
+      .lean<ProcessLean[]>()
+      .exec();
+    return docs.map(this.toDomain);
   }
 
-  public async update(id: string, data: UpdateProcessDto): Promise<ProcessResponseDto | null> {
-    const process = await ProcessModel.findByIdAndUpdate(
-      id,
-      data,
-      { new: true, runValidators: true }
-    ).lean();
-    
-    return process ? this.toResponseDto(process) : null;
+  async create(data: Omit<BaseProcess, "id">): Promise<BaseProcess> {
+    const created = await ProcessModel.create(data);
+    const doc = created.toObject() as ProcessLean;
+    return this.toDomain(doc);
   }
 
-  public async delete(id: string): Promise<boolean> {
-    const result = await ProcessModel.findByIdAndDelete(id);
-    return !!result;
+  async update(
+    id: string,
+    data: Partial<Omit<BaseProcess, "id">>
+  ): Promise<BaseProcess | null> {
+    if (!Types.ObjectId.isValid(id)) return null;
+    const doc = await ProcessModel.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true,
+    })
+      .lean<ProcessLean>()
+      .exec();
+    return doc ? this.toDomain(doc) : null;
   }
 
-  private toResponseDto(process: ProcessLean): ProcessResponseDto {
+  async delete(id: string): Promise<void> {
+    if (!Types.ObjectId.isValid(id)) return;
+    await ProcessModel.findByIdAndDelete(id).exec();
+  }
+
+  /** Mapea un ProcessLean a BaseProcess */
+  private toDomain(doc: ProcessLean): BaseProcess {
     return {
-      id: process._id.toHexString(),
-      startDate: process.startDate,
-      deliveryDate: process.deliveryDate,
-      progressPercentage: process.progressPercentage,
-      status: process.status,
-      createdAt: process.createdAt,
-      updatedAt: process.updatedAt
-    };
-  }
-
-  private toDomainEntity(process: ProcessLean): Process {
-    return {
-      id: process._id.toHexString(),
-      ...process
+      id: doc._id.toHexString(),
+      userId: (doc.userId as Types.ObjectId).toHexString(),
+      items: doc.items.map((item) => ({
+        productId: item.productId.toHexString(),
+        quantity: item.quantity,
+      })),
+      totalAmount: doc.totalAmount as number,
+      startDate: doc.startDate as Date,
+      deliveryDate: doc.deliveryDate as Date,
+      progressPercentage: doc.progressPercentage as number,
+      status: doc.status as BaseProcess['status']
     };
   }
 }

@@ -1,29 +1,35 @@
-import { Router } from 'express';
-import { ProcessController } from '../../presentation';
-import { ProcessRepository } from '../../infrastructure';
+import { Router } from "express";
+import { ProcessController } from "../../presentation";
+import { ProcessRepository, ProductRepository } from "../../infrastructure";
 import {
   CreateProcessUseCase,
   GetAllProcessesUseCase,
   GetProcessByIdUseCase,
   UpdateProcessUseCase,
-  DeleteProcessUseCase
-} from '../../application';
+  DeleteProcessUseCase,
+  GetProcessesByUserUseCase,
+} from "../../application";
+import { validateRoleMiddleware } from "../middleware/jwtMiddleware";
 
 const router = Router();
 
-const repository = new ProcessRepository();
+const processRepository = new ProcessRepository();
+const productRepository = new ProductRepository();
+
 const controller = new ProcessController(
-  new CreateProcessUseCase(repository),
-  new GetAllProcessesUseCase(repository),
-  new GetProcessByIdUseCase(repository),
-  new UpdateProcessUseCase(repository),
-  new DeleteProcessUseCase(repository)
+  new CreateProcessUseCase(processRepository, productRepository),
+  new GetAllProcessesUseCase(processRepository),
+  new GetProcessByIdUseCase(processRepository),
+  new GetProcessesByUserUseCase(processRepository),
+  new UpdateProcessUseCase(processRepository),
+  new DeleteProcessUseCase(processRepository),
 );
 
-router.post('/', controller.create);
-router.get('/', controller.getAll);
-router.get('/:id', controller.getById);
-router.patch('/:id', controller.update);
-router.delete('/:id', controller.delete);
+router.post("/", validateRoleMiddleware(['OPERADOR', 'ADMIN']), controller.create);
+router.get("/user/", validateRoleMiddleware(['OPERADOR', 'ADMIN']) ,controller.getByUser);
+router.get("/", validateRoleMiddleware(['OPERADOR', 'ADMIN']) ,controller.getAll);
+router.get("/:id", validateRoleMiddleware(['OPERADOR', 'ADMIN']), controller.getById);
+router.patch("/:id", validateRoleMiddleware(['OPERADOR', 'ADMIN']), controller.update);
+router.delete("/:id", validateRoleMiddleware(['OPERADOR', 'ADMIN']), controller.delete);
 
 export default router;

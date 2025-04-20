@@ -1,13 +1,11 @@
-// src/application/useCases/process/getProcessById.useCase.ts
 
 import { IProcessRepository } from '../../../domain/repositories/process.repository';
 import { BaseProcess } from '../../../domain/entities/process.entity';
 
-export class GetProcessByIdUseCase {
+export class GetProcessesByUserUseCase {
   constructor(private readonly repo: IProcessRepository) {}
 
-  async execute(id: string): Promise<BaseProcess | null> {
-    return this.repo.findById(id);
+  async execute(userId: string): Promise<BaseProcess[]> {
+    return this.repo.findByUserId(userId);
   }
 }
-

@@ -1,10 +1,12 @@
-import { IProcessRepository } from '../../../domain';
-import { ProcessResponseDto } from '../../dtos';
+// src/application/useCases/process/getAllProcesses.useCase.ts
+
+import { IProcessRepository } from '../../../domain/repositories/process.repository';
+import { BaseProcess } from '../../../domain/entities/process.entity';
 
 export class GetAllProcessesUseCase {
-  constructor(private readonly repository: IProcessRepository) {}
+  constructor(private readonly repo: IProcessRepository) {}
 
-  public async execute(): Promise<ProcessResponseDto[]> {
-    return this.repository.findAll();
+  async execute(): Promise<BaseProcess[]> {
+    return this.repo.findAll();
   }
 }
