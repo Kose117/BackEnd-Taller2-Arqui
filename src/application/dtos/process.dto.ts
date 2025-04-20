@@ -18,7 +18,6 @@ export type ProcessItemDto = Static<typeof ProcessItemSchema>;
 
 // 2. LO QUE ENTRA: creación y actualización
 export const CreateProcessSchema = Type.Object({
-  userId:             Type.String({ format: 'uuid' }),
   items:              Type.Array(ProcessItemSchema, { minItems: 1 }),
   startDate:          Type.Date(),
   deliveryDate:       Type.Date(),

@@ -33,8 +33,9 @@ export class ProductController {
     next: NextFunction
   ): Promise<void> => {
     try {
+      const userId = req.user!.id;      
       const dto = req.body as CreateProductDto;
-      const product = await this.createUseCase.execute(dto);
+      const product = await this.createUseCase.execute(userId,dto);
       res.status(201).json(this.toResponseDto(product));
     } catch (error) {
       next(error);

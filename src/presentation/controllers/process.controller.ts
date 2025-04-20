@@ -54,8 +54,9 @@ export class ProcessController {
     next: NextFunction
   ): Promise<void> => {
     try {
+      const userId = req.user!.id; // Obtener el ID del usuario desde el token JWT
       const dto = req.body as CreateProcessDto;
-      const process = await this.createUseCase.execute(dto);
+      const process = await this.createUseCase.execute(userId, dto);
       res.status(201).json(this.toResponseDto(process));
     } catch (error) {
       next(error);

@@ -1,7 +1,9 @@
-import { BaseProcess } from "../../../domain/entities/process.entity";
-import { IProcessRepository } from "../../../domain/repositories/process.repository";
-import { IProductRepository } from "../../../domain/repositories/product.repository";
-import { CreateProcessDto } from "../../dtos/process.dto";
+// src/application/useCases/process/createProcess.useCase.ts
+
+import { IProcessRepository } from '../../../domain/repositories/process.repository';
+import { IProductRepository } from '../../../domain/repositories/product.repository';
+import { CreateProcessDto }    from '../../dtos/process.dto';
+import { BaseProcess }         from '../../../domain/entities/process.entity';
 
 export class CreateProcessUseCase {
   constructor(
@@ -10,9 +12,12 @@ export class CreateProcessUseCase {
   ) {}
 
   /**
-   * Crea un proceso calculando totalAmount basado en precios de productos
+   * Crea un proceso calculando totalAmount y usando siempre el userId del token
    */
-  async execute(dto: CreateProcessDto): Promise<BaseProcess> {
+  async execute(
+    userId: string,
+    dto: CreateProcessDto
+  ): Promise<BaseProcess> {
     // 1. Obtener precio de cada producto
     const itemsWithPrices = await Promise.all(
       dto.items.map(async item => {
@@ -30,7 +35,7 @@ export class CreateProcessUseCase {
 
     // 3. Construir la entidad sin id
     const toCreate: Omit<BaseProcess, 'id'> = {
-      userId:             dto.userId,
+      userId,
       items:              dto.items,
       totalAmount,
       startDate:          dto.startDate,

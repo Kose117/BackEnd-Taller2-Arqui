@@ -4,7 +4,6 @@ import { Type, Static } from '@sinclair/typebox';
 
 // 1. LO QUE ENTRA: creación y actualización
 export const CreateProductSchema = Type.Object({
-  userId:         Type.String(),           // id del propietario (ObjectId como string)
   name:           Type.String(),
   price:          Type.Number(),           // USD, decimal
   quantity:       Type.Number(),           // stock disponible
