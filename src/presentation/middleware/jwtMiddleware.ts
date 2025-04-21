@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../infrastructure/config";
 
 // Roles permitidos en toda la aplicación
-const VALID_ROLES = ["ADMIN", "OPERADOR"] as const;
+const VALID_ROLES = ["ADMIN", "OPERATOR"] as const;
 type ValidRole = (typeof VALID_ROLES)[number];
 
 export const validateRoleMiddleware =

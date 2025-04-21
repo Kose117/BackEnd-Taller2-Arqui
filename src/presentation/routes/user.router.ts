@@ -36,7 +36,7 @@ router.get('/', userController.getAll);
 router.post('/operador', userController.createOperator);
 router.post('/admin', userController.createAdmin);
 router.get('/:id', userController.getById);
-router.patch('/', validateRoleMiddleware(['OPERADOR', 'ADMIN']) , userController.update);
-router.delete('/', validateRoleMiddleware(['OPERADOR', 'ADMIN']) , userController.delete);
+router.patch('/', validateRoleMiddleware(['OPERATOR', 'ADMIN']) , userController.update);
+router.delete('/', validateRoleMiddleware(['OPERATOR', 'ADMIN']) , userController.delete);
 
 export default router;

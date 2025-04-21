@@ -25,11 +25,11 @@ const controller = new ProcessController(
   new DeleteProcessUseCase(processRepository),
 );
 
-router.post("/", validateRoleMiddleware(['OPERADOR', 'ADMIN']), controller.create);
-router.get("/user/", validateRoleMiddleware(['OPERADOR', 'ADMIN']) ,controller.getByUser);
-router.get("/", validateRoleMiddleware(['OPERADOR', 'ADMIN']) ,controller.getAll);
-router.get("/:id", validateRoleMiddleware(['OPERADOR', 'ADMIN']), controller.getById);
-router.patch("/:id", validateRoleMiddleware(['OPERADOR', 'ADMIN']), controller.update);
-router.delete("/:id", validateRoleMiddleware(['OPERADOR', 'ADMIN']), controller.delete);
+router.post("/", validateRoleMiddleware(['OPERATOR', 'ADMIN']), controller.create);
+router.get("/user/", validateRoleMiddleware(['OPERATOR', 'ADMIN']) ,controller.getByUser);
+router.get("/", validateRoleMiddleware(['OPERATOR', 'ADMIN']) ,controller.getAll);
+router.get("/:id", validateRoleMiddleware(['OPERATOR', 'ADMIN']), controller.getById);
+router.patch("/:id", validateRoleMiddleware(['OPERATOR', 'ADMIN']), controller.update);
+router.delete("/:id", validateRoleMiddleware(['OPERATOR', 'ADMIN']), controller.delete);
 
 export default router;

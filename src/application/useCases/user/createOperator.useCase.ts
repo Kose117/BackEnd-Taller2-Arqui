@@ -22,7 +22,7 @@ export class CreateOperatorUseCase {
     const toCreate: Omit<BaseUser, 'id'> = {
       email:    dto.email,
       password: hashedPassword,
-      userType: 'OPERADOR' as UserType
+      userType: 'OPERATOR' as UserType
     };
 
     // 3. Persistir en repositorio

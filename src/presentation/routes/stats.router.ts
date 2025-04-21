@@ -12,7 +12,7 @@ const ctrl = new StatsController(uc);
 const router = Router();
 router.get(
     '/products',
-    validateRoleMiddleware(["ADMIN", "OPERADOR"]),
+    validateRoleMiddleware(["ADMIN", "OPERATOR"]),
     ctrl.getProductStats,
 );
 
